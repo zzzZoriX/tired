@@ -8,4 +8,6 @@ project(tired VERSION 0.0.1 LANGUAGES C CXX)
 
 add_executable(tired src/main.cpp
     src/uio/uio.cpp
-    src/executor/executor.cpp)
+    src/executor/executor.cpp
+    src/processes/grab/grab.cpp
+    src/processes/files.cpp)

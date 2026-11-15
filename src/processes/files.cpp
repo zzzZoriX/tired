@@ -24,7 +24,7 @@ std::filesystem::path get_home_path(void) {
 
 bool check(void) {
     bool check_result{true};
-    const auto td_path{get_home_path() / ".tired"};
+    const auto td_path{get_home_path() / "tired"};
 
     if(!std::filesystem::exists(td_path)) {
         std::filesystem::create_directory(td_path);
