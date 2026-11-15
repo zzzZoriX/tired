@@ -12,7 +12,7 @@
 #endif
 
 
-void grab::save_processes(const std::vector<std::filesystem::path>& processes) {
+void grab::save_processes(const std::set<std::filesystem::path>& processes) {
     std::ofstream file{get_home_path() / "tired/processes/processes.txt", std::ios::out | std::ios::trunc};
     if(!file.is_open()) {
         uio::error("Failed to open processes.txt for writing.");
@@ -25,8 +25,8 @@ void grab::save_processes(const std::vector<std::filesystem::path>& processes) {
     uio::ok("Processes saved successfully.");
 }
 
-std::vector<std::filesystem::path> grab::grab_processes(void) {
-    std::vector<std::filesystem::path> processes;
+std::set<std::filesystem::path> grab::grab_processes(void) {
+    std::set<std::filesystem::path> processes;
     
 #ifdef _WIN32
     HANDLE snapshot{CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)};
@@ -39,7 +39,12 @@ std::vector<std::filesystem::path> grab::grab_processes(void) {
 
     if(Process32First(snapshot, &entry)) {
         do {
-            processes.push_back(get_process_path(std::stoul(entry.th32ProcessID)));
+            const auto path{get_process_path(std::stoul(pid))};
+
+            if (path.empty())
+                continue;
+
+            processes.insert(path);
         } while(Process32Next(snapshot, &entry));
     }
 
@@ -54,14 +59,22 @@ std::vector<std::filesystem::path> grab::grab_processes(void) {
         if(pid.empty() || !std::all_of(pid.begin(), pid.end(), ::isdigit))
             continue;
 
-        processes.push_back(get_process_path(std::stoul(pid)));
+        auto path{get_process_path(std::stoul(pid))};
+
+        if(path.empty()) 
+            continue;
+
+        if(path.ends_with(deleted_suffix)) 
+            path.erase(path.size() - deleted_suffix.size());
+            
+        processes.insert(path);
     }
 #endif
 
     return processes;
 }
 
-std::filesystem::path grab::get_process_path(const std::uint32_t pid) {
+std::string grab::get_process_path(const std::uint32_t pid) {
     std::string path;
 
 #ifdef _WIN32
