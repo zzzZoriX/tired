@@ -1,11 +1,12 @@
 #include "../include/uio/uio.h"
+#include <string>
 
 
 int main(void) {
-    uio::ok("This is an OK message.");
-    uio::warn("This is a warning message.");
-    uio::error("An error has occurred.");
-    uio::info("This is an informational message.");
+    uio user_io;
+
+    user_io.init_uinput();
+    user_io.wait();
 
     return 0;
 }
