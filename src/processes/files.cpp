@@ -21,3 +21,19 @@ std::filesystem::path get_home_path(void) {
 
     return std::filesystem::path();
 }
+
+bool check(void) {
+    bool check_result{true};
+    const auto td_path{get_home_path() / ".tired"};
+
+    if(!std::filesystem::exists(td_path)) {
+        std::filesystem::create_directory(td_path);
+        check_result = false;
+    }
+    else if(!std::filesystem::exists(td_path / "processes")) {
+        std::filesystem::create_directory(td_path / "processes");
+        check_result = false;
+    }
+
+    return check_result;
+}
