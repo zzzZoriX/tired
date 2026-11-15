@@ -1,7 +1,11 @@
 #pragma once
 
+#include "../../include/processes/grab/auto-grab.h"
+
 
 class executor {
+    auto_grab auto_grab_;
+
 public:
     executor(const executor&) = delete;
     executor(const executor&&) = delete;
@@ -10,7 +14,7 @@ public:
 
     static executor& get_instance(void);
     
-    int execute(const int code) const;
+    int execute(const int code);
 
 private:
     executor(void) = default;

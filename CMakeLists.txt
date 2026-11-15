@@ -10,4 +10,5 @@ add_executable(tired src/main.cpp
     src/uio/uio.cpp
     src/executor/executor.cpp
     src/processes/grab/grab.cpp
-    src/processes/files.cpp)
+    src/processes/files.cpp
+    src/processes/grab/auto-grab.cpp)
