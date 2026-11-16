@@ -4,6 +4,7 @@
 #include <fstream>
 #include <format>
 #include <boost/process/v2/process.hpp>
+#include <boost/process/v2/stdio.hpp>
 #include <boost/asio/io_context.hpp>
 
 #ifdef _WIN32
@@ -104,7 +105,12 @@ bool restore::restore_process(const std::filesystem::path& path) {
     try {
         boost::asio::io_context ioc;
 
-        boost::process::process proc{ioc, path.string(), {}};
+        boost::process::process proc{
+            ioc, 
+            path.string(), 
+            {}, 
+            boost::process::v2::process_stdio{nullptr, nullptr, nullptr}
+        };
         proc.detach();
 
         return true;
