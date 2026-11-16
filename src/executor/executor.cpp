@@ -24,15 +24,16 @@ int executor::execute(const int code) {
             break;
         case 3:
             restore::restore_processes();
+            uio::ok("All saved process restored.");
             break;
         case 4:
             if(auto_grab_.get_status()) {
                 auto_grab_.stop();
-                uio::ok("auto grab disabled.");
+                uio::ok("Auto grab disabled.");
             }
             else {
                 auto_grab_.start();
-                uio::ok("auto grab enabled.");
+                uio::ok("Auto grab enabled.");
             }
             break;
         case 5: {

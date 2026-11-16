@@ -97,7 +97,11 @@ void restore::restore_processes(void) {
         
             if(!result)
                 uio::info(std::format("Process {} cannot be restored.", process.filename().string()));
+            else
+                uio::info(std::format("Process {} has been restored.", process.filename().string()));
         }
+        else 
+            uio::warn(std::format("Process {} already launched.", process.filename().string()));
     }
 }
 
