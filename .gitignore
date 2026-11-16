@@ -2,3 +2,4 @@
 .vscode/
 build/
 debug/
+vcpkg_installed/
