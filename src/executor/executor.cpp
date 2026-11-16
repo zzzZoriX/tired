@@ -2,6 +2,7 @@
 #include "../../include/uio/uio.h"
 #include "../../include/uio/help.h"
 #include "../../include/processes/grab/grab.h"
+#include "../../include/processes/restore/restore.h"
 #include <iostream>
 
 
@@ -22,6 +23,7 @@ int executor::execute(const int code) {
             grab::save_processes(grab::grab_processes());
             break;
         case 3:
+            restore::restore_processes();
             break;
         case 4:
             if(auto_grab_.get_status()) {
