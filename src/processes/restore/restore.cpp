@@ -1,3 +1,10 @@
+#ifdef _WIN32
+    #define WIN32_LEAN_AND_MEAN
+    #define NOMINMAX
+
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+#endif
 #include "../../../include/processes/restore/restore.h"
 #include "../../../include/processes/files.h"
 #include "../../../include/processes/grab/grab.h"
@@ -9,7 +16,7 @@
 #include <boost/asio/io_context.hpp>
 
 
-bool restore::is_active(const std::string& path) {
+bool restore::is_active(const std::filesystem::path& path) {
     return grab::grab_processes().contains(path);
 }
 
@@ -23,7 +30,7 @@ std::optional<std::vector<std::filesystem::path>> restore::read_tpf(void) {
     std::string process;
     std::vector<std::filesystem::path> processes;
     while(std::getline(file, process))
-        processes.push_back(process);
+        processes.push_back(std::filesystem::path(process));
 
     return processes;
 }
@@ -51,10 +58,11 @@ void restore::restore_processes(void) {
 bool restore::restore_process(const std::filesystem::path& path) {
     try {
         boost::asio::io_context ioc;
+        const boost::filesystem::path executable_path{path.native()};
 
         boost::process::process proc{
             ioc, 
-            path.string(), 
+            executable_path,
             {}, 
             boost::process::v2::process_stdio{nullptr, nullptr, nullptr}
         };

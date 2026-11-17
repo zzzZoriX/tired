@@ -1,17 +1,20 @@
 #include "../../include/processes/files.h"
 #include <fstream>
 
+#ifdef _WIN32
+    #include <windows.h>
+#endif
 
 std::filesystem::path get_home_path(void) {
 #if defined(_WIN32)
-    const char* user_profile{std::getenv("USERPROFILE")};
-    if(user_profile) {
+    wchar_t user_profile[MAX_PATH];
+
+    if (GetEnvironmentVariableW(
+        L"USERPROFILE",
+        user_profile,
+        MAX_PATH
+    )) {
         return std::filesystem::path(user_profile);
-    }
-    const char* home_drive{std::getenv("HOMEDRIVE")};
-    const char* home_path{std::getenv("HOMEPATH")};
-    if(home_drive && home_path) {
-        return std::filesystem::path(home_drive) / home_path;
     }
 #else
     const char* home{std::getenv("HOME")};

@@ -31,7 +31,14 @@ void grab::save_processes(const std::set<std::filesystem::path>& processes) {
         else if (ignored.value())
             continue;
 
-        file << process.string() << std::endl;
+        const auto utf8_path{process.u8string()};
+
+        file.write(
+            reinterpret_cast<const char*>(utf8_path.data()),
+            static_cast<std::streamsize>(utf8_path.size())
+        );
+
+        file.put('\n');
     }
 
     uio::ok("Processes saved successfully.");
@@ -86,8 +93,8 @@ std::set<std::filesystem::path> grab::grab_processes(void) {
     return processes;
 }
 
-std::string grab::get_process_path(const std::uint32_t pid) {
-    std::string path;
+std::filesystem::path grab::get_process_path(const std::uint32_t pid) {
+    std::filesystem::path path;
 
 #ifdef _WIN32
     HANDLE process{OpenProcess(
@@ -99,15 +106,13 @@ std::string grab::get_process_path(const std::uint32_t pid) {
     if(!process)
         return {};
 
-    std::vector<char> buffer(32768);
+    std::vector<wchar_t> buffer(32768);
     DWORD size{static_cast<DWORD>(buffer.size())};
 
-    if(QueryFullProcessImageNameA(
-        process,
-        0,
-        buffer.data(),
-        &size
-    )) path.assign(buffer.data(), size);
+    if (QueryFullProcessImageNameW(process, 0, buffer.data(), &size)) {
+      CloseHandle(process);
+      return std::filesystem::path(std::wstring(buffer.data(), size));
+    }
 
     CloseHandle(process);
 #else
@@ -124,7 +129,7 @@ std::string grab::get_process_path(const std::uint32_t pid) {
     if(length == -1)
         return {};
 
-    path.assign(buffer.data(), length);
+    path = std::filesystem::path(std::string(buffer.data(), length));
 #endif
 
     return path;

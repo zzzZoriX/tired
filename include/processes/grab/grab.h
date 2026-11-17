@@ -19,5 +19,5 @@ public:
     static void save_processes(const std::set<std::filesystem::path>& processes);
 
 private:
-    static std::string get_process_path(const std::uint32_t pid);   
+    static std::filesystem::path get_process_path(const std::uint32_t pid);   
 };
