@@ -1,6 +1,7 @@
 #include "../../../include/processes/grab/grab.h"
 #include "../../../include/processes/files.h"
 #include "../../../include/uio/uio.h"
+#include "../../../include/processes/ignore/ignore.h"
 #include <fstream>
 #include <algorithm>
 
@@ -44,6 +45,17 @@ std::set<std::filesystem::path> grab::grab_processes(void) {
             if (path.empty())
                 continue;
 
+            if(std::filesystem::path proc_path{path}; true){
+                auto ignored{ignore::is_ignored(proc_path.filename().string())};
+
+                if(!ignored) {
+                    uio::error(ignored.error());
+                    continue;
+                }
+                else if (ignored.value())
+                    continue;
+            }
+
             processes.insert(path);
         } while(Process32Next(snapshot, &entry));
     }
@@ -66,6 +78,17 @@ std::set<std::filesystem::path> grab::grab_processes(void) {
 
         if(path.ends_with(deleted_suffix)) 
             path.erase(path.size() - deleted_suffix.size());
+        
+        if(std::filesystem::path proc_path{path}; true) {
+            auto ignored{ignore::is_ignored(proc_path.filename().string())};
+
+            if(!ignored) {
+                uio::error(ignored.error());
+                continue;
+            }
+            else if(ignored.value())
+                continue;
+        }
             
         processes.insert(path);
     }
