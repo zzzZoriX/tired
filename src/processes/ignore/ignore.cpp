@@ -63,9 +63,5 @@ std::expected<bool, std::string> ignore::is_ignored(const std::string& process) 
     if(!ignored_processes.has_value())
         return std::unexpected(std::format("Can't open {} file.", (get_home_path() / "tired/processes/ignored.txt").string()));
 
-    auto insert_result{ignored_processes.value().insert(process).second};
-    if(!insert_result)
-        return true;
-    else
-        return false;
+    return ignored_processes.value().contains(process);
 }
