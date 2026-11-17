@@ -1,5 +1,6 @@
 #include "../../../include/processes/restore/restore.h"
 #include "../../../include/processes/files.h"
+#include "../../../include/processes/grab/grab.h"
 #include "../../../include/uio/uio.h"
 #include <fstream>
 #include <format>
@@ -14,60 +15,7 @@
 
 
 bool restore::is_active(const std::string& path) {
-#ifdef _WIN32
-    auto to_lower{[](std::wstring str) { std::transform(str.begin(), str.end(), str.begin(), ::tolower); return str}};
-    int size_needed{MultiByteToWideChar(CP_UTF8, 0, path.data(), (int)path.size(), nullptr, 0)};
-    std::wstring wpath(size_needed, 0);
-    MultiByteToWideChar(CP_UTF8, 0, path.data(), (int)path.size(), &wpath[0], size_needed);
-
-    std::wstring lpath{ToLower(wpath)};
-    HANDLE hsnapshot{CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)};
-    if(hsnapshot == INVALID_HANDLE_VALUE) 
-        return false;
-
-    PROCESSENTRY32W pe32;
-    pe32.dwSize{sizeof(PROCESSENTRY32W)};
-
-    if(Process32FirstW(hsnapshot, &pe32)) {
-        do {
-            HANDLE hproc = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pe32.th32ProcessID);
-            if(hproc) {
-                wchar_t buffer[MAX_PATH];
-                DWORD size{MAX_PATH};
-                if(QueryFullProcessImageNameW(hproc, 0, buffer, &size)) {
-                    if(ToLower(buffer) == lpath) {
-                        CloseHandle(hproc);
-                        CloseHandle(hproc);
-                        return true;
-                    }
-                }
-                CloseHandle(hproc);
-            }
-        } while(Process32NextW(hsnapshot, &pe32));
-    }
-
-    CloseHandle(hsnapshot);
-#else
-    std::error_code ec;
-    std::filesystem::path ct{std::filesystem::weakly_canonical(path, ec)};
-
-    for(const auto& entry: std::filesystem::directory_iterator("/proc", ec)) {
-        if(!std::filesystem::is_directory(entry))
-            continue;
-
-        const auto filename{entry.path().filename().string()};
-        if(filename.find_first_not_of("012345789") != std::string::npos)
-            continue;
-
-        std::filesystem::path exe{entry.path() / "exe"};
-        std::filesystem::path actual_path{std::filesystem::read_symlink(exe, ec)};
-
-        if(!ec && actual_path == path)
-            return true;
-    }
-#endif
-
-    return false;
+    return grab::grab_processes().contains(path);
 }
 
 std::optional<std::vector<std::filesystem::path>> restore::read_tpf(void) {
