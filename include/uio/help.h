@@ -37,6 +37,14 @@
 "   auto-grab-time\n" \
 "     Set the time interval between automatic captures.\n" \
 "\n" \
+"   add-to-ignore\n" \
+"     Add files to the ignore list. Files in this list will no\n" \
+"     longer be considered by the grab command.\n" \
+"\n" \
+"   remove-from-ignore\n" \
+"     Remove files from the ignore list, allowing the grab\n" \
+"     command to consider them again.\n" \
+"\n" \
 "============================================================\n" \
-"                    Tired v0.0.1\n" \
+"                    Tired v0.1.0\n" \
 "============================================================\n"
