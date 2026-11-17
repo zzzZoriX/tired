@@ -1,4 +1,5 @@
 #include "../../include/processes/files.h"
+#include <fstream>
 
 
 std::filesystem::path get_home_path(void) {
@@ -30,8 +31,12 @@ bool check(void) {
         std::filesystem::create_directory(td_path);
         check_result = false;
     }
-    else if(!std::filesystem::exists(td_path / "processes")) {
+    if(!std::filesystem::exists(td_path / "processes")) {
         std::filesystem::create_directory(td_path / "processes");
+        check_result = false;
+    }
+    if(!std::filesystem::exists(td_path / "processes/ignored.txt")) {
+        std::ofstream file_creator{td_path / "processes/ignored.txt", std::ios::out};
         check_result = false;
     }
 
