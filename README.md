@@ -1,4 +1,4 @@
-[ru](#ru) | [eng](#eng)
+[RU](#ru) | [ENG](#eng)
 
 ---
 
@@ -18,10 +18,11 @@ Tired — инструмент для работы с процессами, пр
 
 ### Возможности
 
-- Захватывать все активные процессы
-- Востанавливать все активные на момент последнего сохранения процессы
-- Автосохранение
-- (В будущем) Удобные GUI
+- Захват всех активных процессов.
+- Восстановление всех процессов, активных на момент последнего сохранения.
+- Автоматическое сохранение.
+- Игнорирование выбранных файлов при захвате процессов.
+- (В будущем) Удобный графический интерфейс (GUI).
 
 ### Команды
 
@@ -31,6 +32,8 @@ Tired — инструмент для работы с процессами, пр
 | `restore` | Восстановление сохранённых данных. |
 | `auto-grab` | Запуск автоматического сохранения процессов. |
 | `auto-grab-time` | Настройка интервала автоматического сохранения. |
+| `add-to-ignore` | Добавление файлов в специальный список игнорирования. Файлы из этого списка больше не учитываются командой `grab`. |
+| `remove-from-ignore` | Удаление файлов из списка игнорирования, после чего команда `grab` снова сможет учитывать их. |
 | `help` | Вывод справки. |
 | `quit` | Завершение работы приложения. |
 
@@ -58,16 +61,17 @@ Tired — инструмент для работы с процессами, пр
 
 ## About
 
-Tired is a tool for working with processes, providing the ability to save information about running processes and restore it when needed.
+Tired is a tool for working with processes, providing the ability to save information about running processes and restore them when needed.
 
 The project is developed in C++ using platform-specific capabilities of Windows and Linux.
 
 ### Features
 
-- Capture all active processes
-- Restore all processes that were active at the time of the last save
-- Autosave
-- (In the future) User-friendly GUI
+- Capture all active processes.
+- Restore all processes that were active at the time of the last save.
+- Automatic process saving.
+- Ignore selected files during process capture.
+- (In the future) User-friendly graphical interface (GUI).
 
 ### Commands
 
@@ -77,13 +81,15 @@ The project is developed in C++ using platform-specific capabilities of Windows 
 | `restore` | Restores previously saved data. |
 | `auto-grab` | Starts automatic process saving. |
 | `auto-grab-time` | Configures the automatic saving interval. |
+| `add-to-ignore` | Adds files to a dedicated ignore list. Files in this list will no longer be considered by the `grab` command. |
+| `remove-from-ignore` | Removes files from the ignore list, allowing the `grab` command to consider them again. |
 | `help` | Displays application help. |
 | `quit` | Exits the application. |
 
 ### Technologies
 
 - **CMake** — build system.
-- **C++20** — modern language features
+- **C++20** — modern C++ language features, including `std::jthread` and `std::stop_token`.
 
 ### Platforms
 
