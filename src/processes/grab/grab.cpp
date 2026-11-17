@@ -4,10 +4,11 @@
 #include "../../../include/processes/ignore/ignore.h"
 #include <fstream>
 #include <algorithm>
+#include <vector>
 
 #ifdef _WIN32
 #include <windows.h>
-#include <TlHelp32.h>
+#include <tlhelp32.h>
 #else
 #include <array>
 #endif
@@ -43,14 +44,14 @@ std::set<std::filesystem::path> grab::grab_processes(void) {
     HANDLE snapshot{CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)};
 
     if(snapshot == INVALID_HANDLE_VALUE)
-        return;
+        return {};
 
     PROCESSENTRY32 entry{};
-    entry.dwSize{sizeof(PROCESSENTRY32)};
+    entry.dwSize = sizeof(PROCESSENTRY32);
 
     if(Process32First(snapshot, &entry)) {
         do {
-            const auto path{get_process_path(std::stoul(pid))};
+            const auto path{get_process_path(entry.th32ProcessID)};
 
             if (path.empty())
                 continue;

@@ -8,11 +8,6 @@
 #include <boost/process/v2/stdio.hpp>
 #include <boost/asio/io_context.hpp>
 
-#ifdef _WIN32
-    #include <windows.h>
-    #include <tlhelp32.h
-#endif
-
 
 bool restore::is_active(const std::string& path) {
     return grab::grab_processes().contains(path);
@@ -40,7 +35,7 @@ void restore::restore_processes(void) {
         return;
 
     for(const auto& process: processes.value()) {
-        if(!restore::is_active(process)) {
+        if(!restore::is_active(process.string())) {
             auto result{restore::restore_process(process)};
         
             if(!result)

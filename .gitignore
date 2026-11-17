@@ -1,5 +1,6 @@
 .cache/
 .vscode/
 build/
+build-win/
 debug/
 vcpkg_installed/

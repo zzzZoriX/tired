@@ -8,7 +8,8 @@
 
 void uio::ok(const std::string& msg) {
 #ifdef _WIN32
-    std::cout << GREEN << "[OK] ";
+    GREEN;
+    std::cout << "[OK] ";
     RESET;
     std::cout << msg << std::endl;
 #else
@@ -18,7 +19,8 @@ void uio::ok(const std::string& msg) {
 
 void uio::warn(const std::string& msg) {
 #ifdef _WIN32
-    std::cout << YELLOW << "[WARN] ";
+    YELLOW;
+    std::cout << "[WARN] ";
     RESET;
     std::cout << msg << std::endl;
 #else
@@ -28,7 +30,8 @@ void uio::warn(const std::string& msg) {
 
 void uio::error(const std::string& msg) {
 #ifdef _WIN32
-    std::cout << RED << "[ERROR] ";
+    RED;
+    std::cout << "[ERROR] ";
     RESET;
     std::cout << msg << std::endl;
 #else
@@ -38,7 +41,8 @@ void uio::error(const std::string& msg) {
 
 void uio::info(const std::string& msg) {
 #ifdef _WIN32
-    std::cout << BLUE << "[INFO] ";
+    BLUE;
+    std::cout << "[INFO] ";
     RESET;
     std::cout << msg << std::endl;
 #else
