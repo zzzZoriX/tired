@@ -14,6 +14,7 @@ add_executable(tired src/main.cpp
     src/processes/grab/grab.cpp
     src/processes/files.cpp
     src/processes/grab/auto-grab.cpp
-    src/processes/restore/restore.cpp)
+    src/processes/restore/restore.cpp
+    src/processes/ignore/ignore.cpp)
 
 target_link_libraries(tired PRIVATE Boost::process)

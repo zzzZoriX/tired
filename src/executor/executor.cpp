@@ -3,6 +3,7 @@
 #include "../../include/uio/help.h"
 #include "../../include/processes/grab/grab.h"
 #include "../../include/processes/restore/restore.h"
+#include "../../include/processes/ignore/ignore.h"
 #include <iostream>
 
 
@@ -49,13 +50,35 @@ int executor::execute(const int code) {
             break;
         }
         case 6: {
+            std::string process;
             
+            uio::only_msg("Enter the process which you want to ignore(app name): ");
+            std::getline(std::cin, process);
+
+            auto result{ignore::add(process)};
+
+            if(!result)
+                uio::error(result.error());
+            else 
+                uio::ok(std::format("The {} process is marked as \"ignored\".", process));
+
             break;
         }
-        case 7:
+        case 7: {
+            std::string process;
+            
+            uio::only_msg("Enter the process that you no longer wish to ignore(app name): ");
+            std::getline(std::cin, process);
+
+            auto result{ignore::remove(process)};
+
+            if(!result)
+                uio::error(result.error());
+            else
+                uio::ok(std::format("The {} process is no longer being ignored", process));
+
             break;
-        case 8:
-            break;
+        }
         default:
             uio::warn("Unknown command.");
             break;
