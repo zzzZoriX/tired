@@ -48,6 +48,14 @@ int executor::execute(const int code) {
 
             break;
         }
+        case 6: {
+            
+            break;
+        }
+        case 7:
+            break;
+        case 8:
+            break;
         default:
             uio::warn("Unknown command.");
             break;

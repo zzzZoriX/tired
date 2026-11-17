@@ -11,7 +11,10 @@ inline const std::map<std::string, int> input_map{
     {"grab", 2},
     {"restore", 3},
     {"auto-grab", 4},
-    {"auto-grab-time", 5}
+    {"auto-grab-time", 5},
+    {"ignored", 6},
+    {"ignore-add", 7},
+    {"ignore-remove", 8}
 };
 
 const int get_code(const std::string_view input) {
